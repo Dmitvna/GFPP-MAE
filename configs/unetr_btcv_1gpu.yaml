@@ -1,0 +1,99 @@
+# architecture
+arch: vit_base
+enc_arch: ViTBackbone
+dec_arch: UNETR_decoder
+
+# wandb
+proj_name: UNETR
+run_name: ${proj_name}_${arch}_${dataset}
+wandb_id:
+disable_wandb: 0
+
+# dataset
+dataset: btcv
+json_list: 'dataset_0.json'
+data_path: ./data/BTCV
+
+# output
+output_dir: ./output/${run_name}
+ckpt_dir: ${output_dir}/ckpts
+
+# data preprocessing
+space_x: 1.5
+space_y: 1.5
+space_z: 2.0
+a_min: -175.0
+a_max: 250.0
+b_min: 0.0
+b_max: 1.0
+roi_x: 96
+roi_y: 96
+roi_z: 96
+RandFlipd_prob: 0.2
+RandRotate90d_prob: 0.2
+RandScaleIntensityd_prob: 0.1
+RandShiftIntensityd_prob: 0.1
+infer_overlap: 0.5
+spatial_dim: 3
+num_samples: 4
+
+# trainer
+trainer_name: SegTrainer
+batch_size: 2
+val_batch_size: 1
+start_epoch: 0
+warmup_epochs: 50
+epochs: 5000
+workers: 2
+pretrain:
+resume:
+test: False
+
+# drop
+drop_path: 0.1
+# tricks
+mixup: 0.
+cutmix: 0.
+label_smoothing: 0.
+
+# model
+patch_size: 16
+in_chans: 1
+feature_size: 16
+encoder_embed_dim: 768
+encoder_depth: 12
+encoder_num_heads: 12
+
+# loss
+smooth_nr: 0.0
+smooth_dr: 1e-6
+
+# optimizer
+type: adamw
+lr: 0.1024
+beta1: 0.9
+beta2: 0.95 # 0.999
+weight_decay: 0.05 # 1e-5
+layer_decay: 0.75
+
+# logging
+vis_batch_size: 4
+save_freq: 2500
+eval_freq: 100
+print_freq: 1
+
+# distributed processing
+gpu: 0
+dist_url:
+world_size: 1
+multiprocessing_distributed: false
+dist_backend: nccl
+distributed:
+rank: 0
+ngpus_per_node:
+
+# randomness
+seed: 1234
+
+# debugging
+debug: false
